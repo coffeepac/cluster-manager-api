@@ -54,6 +54,7 @@ func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
 						Name:       "coreos/prometheus-operator",
 						Repository: sdsapi.ChartRepository{Name: "coreos", URL: "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"},
 					},
+					Values: `rbacEnable: false`,
 				},
 				{
 					Name:           "kube-prometheus",
@@ -64,8 +65,9 @@ func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
 						Repository: sdsapi.ChartRepository{Name: "coreos", URL: "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"},
 					},
 					Values: `## kube-prometheus configuration, ref: https://github.com/samsung-cnct/cmc-poc.cluster.cnct.io/blob/master/managed-cluster/helm-values/kube-prometheus/values.yaml
-					rbacEnable: false
-					pspEnable: false
+					global:
+					  rbacEnable: false
+					  pspEnable: false
 					
 					grafana:
 					  service:
