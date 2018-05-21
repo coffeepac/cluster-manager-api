@@ -63,6 +63,30 @@ func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
 						Name:       "coreos/kube-prometheus",
 						Repository: sdsapi.ChartRepository{Name: "coreos", URL: "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"},
 					},
+					Values: `## kube-prometheus configuration, ref: https://github.com/samsung-cnct/cmc-poc.cluster.cnct.io/blob/master/managed-cluster/helm-values/kube-prometheus/values.yaml
+					grafana:
+					  service:
+					    type: NodePort
+					    #
+					    # chart currently does not allow this override
+					    # Have to kubectl label by hand for these
+					    labels:
+					        kubernetes.io/cluster-service: "true"
+					        kubernetes.io/name: "Grafana"
+
+					alertmanager:
+					  service:
+					    type: NodePort
+					    labels:
+					      kubernetes.io/cluster-service: "true"
+					      kubernetes.io/name: "AlertManager"
+
+					prometheus:
+					  service:
+					     type: NodePort
+					     labels:
+					       kubernetes.io/cluster-service: "true"
+					       kubernetes.io/name: "Prometheus"`,
 				},
 				{
 					Name:           "logging",
@@ -72,6 +96,10 @@ func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
 						Name:       "sds/logging-client",
 						Repository: sdsapi.ChartRepository{Name: "sds", URL: "https://charts.migrations.cnct.io"},
 					},
+					Values: `## client-logging config.  ref: https://github.com/samsung-cnct/chart-logging-client/blob/master/charts/logging-client/values.yaml
+					fluent-bit:
+					  name: fluent-bit
+					  cluster_uuid: 00000000-0000-0000-0000-000000000000`,
 				},
 				{
 					Name:           "nginx-ingress",
