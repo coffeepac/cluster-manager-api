@@ -64,6 +64,9 @@ func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
 						Repository: sdsapi.ChartRepository{Name: "coreos", URL: "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"},
 					},
 					Values: `## kube-prometheus configuration, ref: https://github.com/samsung-cnct/cmc-poc.cluster.cnct.io/blob/master/managed-cluster/helm-values/kube-prometheus/values.yaml
+					rbacEnable: false
+					pspEnable: false
+					
 					grafana:
 					  service:
 					    type: NodePort
@@ -72,7 +75,7 @@ func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
 					    # Have to kubectl label by hand for these
 					    labels:
 					        kubernetes.io/cluster-service: "true"
-					        kubernetes.io/name: "Grafana"
+					        kubernetes.io/name: "MonitorGrafana"
 
 					alertmanager:
 					  service:
